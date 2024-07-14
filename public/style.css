@@ -110,7 +110,6 @@ body {
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
-
 .navbar {
   border-bottom-left-radius: 18px;
   display: flex;
@@ -164,9 +163,11 @@ body {
 .navbar {
   transition: transform 0.3s ease-in-out;
 }
+
 .navbar.hidden {
   transform: translateY(-100%);
 }
+
 .notch {
   width: 50px;
   height: 5px;
@@ -180,5 +181,3 @@ body {
   z-index: 1001;
   cursor: pointer;
 }
-
-
