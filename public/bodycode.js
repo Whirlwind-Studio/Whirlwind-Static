@@ -13,7 +13,7 @@ frame.addEventListener('load', () => {
 notch.addEventListener('mouseenter', () => {
     if (isIframeLoaded) {
         navbar.classList.remove('hidden');
-        startHideTimer();
+        notch.classList.add("no-pointer-events");
     }
 });
 
@@ -29,6 +29,7 @@ function startHideTimer() {
         if (isIframeLoaded) {
             navbar.classList.add('hidden');
         }
+        notch.classList.remove("no-pointer-events")
     }, 500);
 }
 

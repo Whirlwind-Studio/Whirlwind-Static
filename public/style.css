@@ -177,7 +177,9 @@ body {
   z-index: 1001;
   cursor: pointer;
 }
-
+.no-pointer-events {
+  pointer-events: none;
+}
 @keyframes gradientAnimation {
   0% { 
     background-position: 0% 0%; 
