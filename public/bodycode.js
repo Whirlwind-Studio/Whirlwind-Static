@@ -37,7 +37,6 @@ document.addEventListener('touchstart', (e) => {
     if (e.touches[0].clientY < navbar.offsetHeight) {
         if (isIframeLoaded) {
             navbar.classList.remove('hidden');
-            startHideTimer();
         }
     }
 });
