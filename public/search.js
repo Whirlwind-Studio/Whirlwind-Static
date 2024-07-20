@@ -3,13 +3,13 @@
  *
  * @param {string} input
  * @param {string} template Template for a search query.
- * @returns {string} Fully qualified URL
+ * @returns {url: string, was_search: boolean} url: Fully qualified URL, was_search: query interpreted as a search
  */
 function search(input, template) {
   try {
     // input is a valid URL:
     // eg: https://example.com, https://example.com/test?q=param
-    return new URL(input).toString();
+    return {url: new URL(input).toString(), was_search: false};
   } catch (err) {
     // input was not a valid URL
   }
@@ -19,7 +19,7 @@ function search(input, template) {
     // eg: example.com, https://example.com/test?q=param
     const url = new URL(`http://${input}`);
     // only if the hostname has a TLD/subdomain
-    if (url.hostname.includes(".")) return url.toString();
+    if (url.hostname.includes(".")) return {url: url.toString(), was_search: false};
   } catch (err) {
     // input was not valid URL
   }
@@ -28,5 +28,5 @@ function search(input, template) {
 
   // Attempts to convert the input to a fully qualified URL have failed
   // Treat the input as a search query
-  return template.replace("%s", encodeURIComponent(input));
+  return {url: template.replace("%s", encodeURIComponent(input)), was_search: true};
 }
