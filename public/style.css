@@ -77,13 +77,17 @@ body {
   padding: 20px;
   box-sizing: border-box;
 }
+#uv-form {
+    display: flex;
+}
 
 .search-container {
   position: relative;
+  width: min(50rem, 80%);
 }
 
 .search-input {
-  width: 400px;
+  width: 100%;
   height: 35px;
   padding: 10px 20px;
   border: none;
@@ -95,6 +99,7 @@ body {
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: background 0.3s, box-shadow 0.3s;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .search-input::placeholder {
@@ -177,7 +182,9 @@ body {
   z-index: 1001;
   cursor: pointer;
 }
-
+.no-pointer-events {
+  pointer-events: none;
+}
 @keyframes gradientAnimation {
   0% { 
     background-position: 0% 0%; 

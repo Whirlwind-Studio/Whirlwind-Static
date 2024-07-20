@@ -35,14 +35,14 @@
             <form id="uv-form">
                 <input type="text" id="uv-address" class="search-input" placeholder="Search or enter URL">
                 <input type="hidden" id="uv-search-engine" value="https://www.google.com/search?q=%s">
-            </form>
+            </form>        
+            <p id="uv-error"></p>
+            <pre id="uv-error-code"></pre>
         </div>
 
-        <p id="uv-error"></p>
-        <pre id="uv-error-code"></pre>
     </div>
 
-    <iframe id="uv-frame" style="display:none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"></iframe>
+    <iframe title="Proxied Content" id="uv-frame" style="display:none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"></iframe>
     <script src="bodycode.js"></script>
 </body>
 </html>
