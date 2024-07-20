@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,36 +15,42 @@
     <script src="index.js" defer></script>
     <script defer src="bodycode.js"></script>
 </head>
+
 <body>
-    <div class="gradient-background"></div>
-    <div class="navbar">
-        <div class="logo">
-            <img src="whirlwind.png" alt="Logo">
+    <div class="fullscreen" id="initial-page">
+        <div class="gradient-background"></div>
+        <div class="navbar">
+            <div class="logo">
+                <img src="whirlwind.png" alt="Logo">
+            </div>
+            <div class="settings">
+                <button class="settings-button">
+                    <img src="settings.png" alt="Settings">
+                </button>
+            </div>
         </div>
-        <div class="settings">
-            <button class="settings-button">
-                <img src="settings.png" alt="Settings">
-            </button>
+        <div class="notch"></div>
+
+        <div class="content-wrapper">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="search-container">
+                <form id="uv-form" data-is-search-bar="true">
+                    <input type="text" id="uv-address" class="search-input" placeholder="Search or enter URL">
+                    <input type="hidden" id="uv-search-engine" value="https://www.google.com/search?q=%s">
+                </form>
+                <p id="uv-error"></p>
+                <pre id="uv-error-code"></pre>
+            </div>
         </div>
     </div>
-    <div class="notch"></div>
+    <div id="proxied-content-wrapper" class="none">
+        <div id="omnibox-wrapper">
 
-    <div class="content-wrapper">
-        <div class="wave"></div>
-        <div class="wave"></div>
-        <div class="wave"></div>
-        <div class="search-container">
-            <form id="uv-form">
-                <input type="text" id="uv-address" class="search-input" placeholder="Search or enter URL">
-                <input type="hidden" id="uv-search-engine" value="https://www.google.com/search?q=%s">
-            </form>        
-            <p id="uv-error"></p>
-            <pre id="uv-error-code"></pre>
         </div>
-
+        <iframe title="Proxied Content" class="uv-frame" id="uv-frame"></iframe>
     </div>
-
-    <iframe title="Proxied Content" id="uv-frame" style="display:none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"></iframe>
-    
 </body>
+
 </html>
