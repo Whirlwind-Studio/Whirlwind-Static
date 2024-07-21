@@ -117,7 +117,7 @@ body {
 }
 .omnibox {
     width: 90%;
-    padding: 3%;
+    padding: 3% 0 3% 3%;
 }
 .search-input {
     width: 100%;
@@ -170,6 +170,7 @@ body {
 
 .settings {
     position: relative;
+    padding: 0.5% 3% 0.5% 3%;
 }
 
 .settings-button {
@@ -180,9 +181,8 @@ body {
 }
 
 .settings-button img {
-    width: 26px;
-    height: 26px;
-    padding-right: 50px;
+    width: 35px;
+    height: 35px;
 }
 
 .settings-button:hover img {
