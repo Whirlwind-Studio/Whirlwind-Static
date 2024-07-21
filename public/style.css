@@ -57,15 +57,6 @@ body {
         radial-gradient(at 75% 17%, rgb(42, 53, 209) 0px, transparent 50%),
         radial-gradient(at 65% 3%, rgb(144, 159, 244) 0px, transparent 50%);
 
-
-    radial-gradient(at 53% 79%, rgb(80, 156, 255) 0px, transparent 50%),
-    radial-gradient(at 74% 14%, rgb(93, 137, 218) 0px, transparent 50%),
-    radial-gradient(at 55% 5%, rgb(81, 186, 235) 0px, transparent 50%),
-    radial-gradient(at 98% 25%, rgb(107, 55, 251) 0px, transparent 50%),
-    radial-gradient(at 56% 24%, rgb(68, 93, 206) 0px, transparent 50%),
-    radial-gradient(at 75% 17%, rgb(42, 53, 209) 0px, transparent 50%),
-    radial-gradient(at 65% 3%, rgb(144, 159, 244) 0px, transparent 50%);
-
     background-size: 200% 200%;
     animation: gradientAnimation 15s ease infinite;
 }
