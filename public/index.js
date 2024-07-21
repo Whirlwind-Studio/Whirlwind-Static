@@ -32,11 +32,11 @@ form.addEventListener("submit", async (event) => {
     } catch (err) {
         error.textContent = "Failed to register service worker.";
         errorCode.textContent = err.toString();
-        throw err;  
+        throw err;
     }
-    
+
     let url = search(address.value, searchEngine.value).url;
-    
+
     if (is_search_bar) {
         let proxied_wrapper = document.getElementById("proxied-content-wrapper");
         proxied_wrapper.classList.replace("none", "fullscreen");
@@ -58,11 +58,11 @@ form.addEventListener("submit", async (event) => {
     if (await connection.getTransport() !== "/epoxy/index.mjs") {
         await connection.setTransport("/epoxy/index.mjs", [{ wisp: wispUrl }]);
     }
-    
+
     frame.src = __uv$config.prefix + __uv$config.encodeUrl(url);
 });
 let prevLocation = document.getElementById("uv-frame").contentDocument.location.href;
-let x = setInterval(function() {
+let x = setInterval(function () {
     let frame = document.getElementById("uv-frame");
     if (prevLocation != frame.contentDocument.location.href) {
         document.getElementById("uv-address").value = decodeURL(frame.contentDocument.location.href);
