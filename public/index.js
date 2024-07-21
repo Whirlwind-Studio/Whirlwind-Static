@@ -68,7 +68,7 @@ let x = setInterval(function() {
         document.getElementById("uv-address").value = decodeURL(frame.contentDocument.location.href);
         prevLocation = frame.contentDocument.location.href;
     }
-}, 10);
+}, 50);
 function decodeURL(url) {
     return __uv$config.decodeUrl(url.split(__uv$config.prefix)[1]);
 }
