@@ -100,10 +100,13 @@ body {
     border: 8px solid;
     border-color: #000 #0000;
     animation: l1 1s infinite;
-  }
-  @keyframes l1 {to{transform: rotate(.5turn)}}
+}
 
-
+@keyframes l1 {
+    to {
+        transform: rotate(.5turn)
+    }
+}
 
 .uv-frame {
     position: absolute;
@@ -113,9 +116,11 @@ body {
     height: 90%;
     border: none;
 }
+
 .loaded-frame {
     background: white;
 }
+
 .none {
     display: none !important;
 }
@@ -135,12 +140,14 @@ body {
     stroke-width: 0.25rem;
     padding: 0.25rem;
 }
+
 .nav-icon:hover {
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.3);
 
 
 }
+
 .fullscreen {
     position: absolute;
     top: 0;

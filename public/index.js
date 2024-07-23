@@ -59,7 +59,7 @@ async function formSubmit(event, input_url) {
         errorCode.textContent = err.toString();
         throw err;
     }
-    
+
     let url = input_url ?? search(address.value, searchEngine.value).url;
 
 
