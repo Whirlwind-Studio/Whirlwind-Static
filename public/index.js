@@ -1,53 +1,40 @@
 "use strict";
-/**
- * @type {HTMLFormElement}
- */
 const form = document.getElementById("uv-form");
-/**
- * @type {HTMLInputElement}
- */
 const address = document.getElementById("uv-address");
-/**
- * @type {HTMLInputElement}
- */
 const searchEngine = document.getElementById("uv-search-engine");
-/**
- * @type {HTMLParagraphElement}
- */
 const error = document.getElementById("uv-error");
-/**
- * @type {HTMLPreElement}
- */
 const errorCode = document.getElementById("uv-error-code");
 const connection = new BareMux.BareMuxConnection("/baremux/worker.js")
 const loading_animation = document.getElementById("loader");
+const frame = document.getElementById("uv-frame");
+const navbar = document.getElementById('navbar');
+const notch = document.getElementById("notch");
+const settings = document.getElementById("settings");
+const reload = document.getElementById("reload");
+const back = document.getElementById("back");
+const forward = document.getElementById("forward");
 
 form.addEventListener("submit", formSubmit);
-document.getElementById("reload").addEventListener("click", function () {
-    let frame = document.getElementById("uv-frame");
+reload.addEventListener("click", function () {
     formSubmit(null, decodeURL(frame.contentDocument.location.href));
 });
-document.getElementById("back").addEventListener("click", function () {
-    let frame = document.getElementById("uv-frame");
+back.addEventListener("click", function () {
     frame.contentWindow.history.back();
 });
 
-document.getElementById("forward").addEventListener("click", function () {
-    let frame = document.getElementById("uv-frame");
+forward.addEventListener("click", function () {
     frame.contentWindow.history.forward();
 })
 
-let prevLocation = document.getElementById("uv-frame").contentDocument.location.href;
+let prevLocation = frame.contentDocument.location.href;
 let x = setInterval(function () {
-    let frame = document.getElementById("uv-frame");
     if (prevLocation != frame.contentDocument.location.href) {
-        document.getElementById("uv-address").value = decodeURL(frame.contentDocument.location.href);
+        address.value = decodeURL(frame.contentDocument.location.href);
         prevLocation = frame.contentDocument.location.href;
     }
 }, 50);
 
 async function formSubmit(event, input_url) {
-    let frame = document.getElementById("uv-frame");
     if (event ?? false) event.preventDefault();
 
     let is_search_bar = form.dataset.isSearchBar === "true";
@@ -72,11 +59,9 @@ async function formSubmit(event, input_url) {
         form.classList.add("omnibox");
         form.dataset.isSearchBar = "false";
 
-        document.getElementById("notch").classList.add("none");
-        let navbar = document.getElementById("navbar");
+        notch.classList.add("none");
         navbar.classList.add("none");
 
-        let settings = navbar.getElementsByClassName("settings")[0];
         omnibox_wrapper.appendChild(settings);
     }
 
