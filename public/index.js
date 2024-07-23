@@ -27,6 +27,15 @@ document.getElementById("reload").addEventListener("click", function () {
     let frame = document.getElementById("uv-frame");
     formSubmit(null, decodeURL(frame.contentDocument.location.href));
 });
+document.getElementById("back").addEventListener("click", function () {
+    let frame = document.getElementById("uv-frame");
+    frame.contentWindow.history.back();
+});
+
+document.getElementById("forward").addEventListener("click", function () {
+    let frame = document.getElementById("uv-frame");
+    frame.contentWindow.history.forward();
+})
 
 let prevLocation = document.getElementById("uv-frame").contentDocument.location.href;
 let x = setInterval(function () {

@@ -123,7 +123,8 @@ body {
 .navigator-wrapper {
     margin-left: 1%;
     display: flex;
-
+    align-items: center;
+    justify-self: center;
 }
 
 .nav-icon {
