@@ -22,9 +22,24 @@ const errorCode = document.getElementById("uv-error-code");
 const connection = new BareMux.BareMuxConnection("/baremux/worker.js")
 const loading_animation = document.getElementById("loader");
 
-form.addEventListener("submit", async (event) => {
+form.addEventListener("submit", formSubmit);
+document.getElementById("reload").addEventListener("click", function () {
     let frame = document.getElementById("uv-frame");
-    event.preventDefault();
+    formSubmit(null, decodeURL(frame.contentDocument.location.href));
+});
+
+let prevLocation = document.getElementById("uv-frame").contentDocument.location.href;
+let x = setInterval(function () {
+    let frame = document.getElementById("uv-frame");
+    if (prevLocation != frame.contentDocument.location.href) {
+        document.getElementById("uv-address").value = decodeURL(frame.contentDocument.location.href);
+        prevLocation = frame.contentDocument.location.href;
+    }
+}, 50);
+
+async function formSubmit(event, input_url) {
+    let frame = document.getElementById("uv-frame");
+    if (event ?? false) event.preventDefault();
 
     let is_search_bar = form.dataset.isSearchBar === "true";
 
@@ -35,8 +50,9 @@ form.addEventListener("submit", async (event) => {
         errorCode.textContent = err.toString();
         throw err;
     }
+    
+    let url = input_url ?? search(address.value, searchEngine.value).url;
 
-    let url = search(address.value, searchEngine.value).url;
 
     if (is_search_bar) {
         let proxied_wrapper = document.getElementById("proxied-content-wrapper");
@@ -52,7 +68,7 @@ form.addEventListener("submit", async (event) => {
         navbar.classList.add("none");
 
         let settings = navbar.getElementsByClassName("settings")[0];
-        omnibox_wrapper.appendChild(settings)
+        omnibox_wrapper.appendChild(settings);
     }
 
     let wispUrl = (location.protocol === "https:" ? "wss" : "ws") + "://" + location.host + "/wisp/";
@@ -67,15 +83,8 @@ form.addEventListener("submit", async (event) => {
             loading_animation.classList.add("none");
         });
     }
-});
-let prevLocation = document.getElementById("uv-frame").contentDocument.location.href;
-let x = setInterval(function () {
-    let frame = document.getElementById("uv-frame");
-    if (prevLocation != frame.contentDocument.location.href) {
-        document.getElementById("uv-address").value = decodeURL(frame.contentDocument.location.href);
-        prevLocation = frame.contentDocument.location.href;
-    }
-}, 50);
+}
+
 function decodeURL(url) {
     return __uv$config.decodeUrl(url.split(__uv$config.prefix)[1]);
 }

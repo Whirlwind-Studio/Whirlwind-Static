@@ -120,6 +120,25 @@ body {
     display: none !important;
 }
 
+.navigator-wrapper {
+    margin-left: 3%;
+}
+
+.reload {
+    stroke: white;
+    fill: none;
+    width: 2rem;
+    height: 2rem;
+    stroke-linejoin: bevel;
+    stroke-width: 0.25rem;
+    padding: 0.25rem;
+}
+.reload:hover {
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+
+
+}
 .fullscreen {
     position: absolute;
     top: 0;
