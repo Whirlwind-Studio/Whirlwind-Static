@@ -12,8 +12,9 @@
     <script src="uv/uv.config.js" defer></script>
     <script src="register-sw.js" defer></script>
     <script src="search.js" defer></script>
+    <script src="iframeevent.js" defer></script>
     <script src="index.js" defer></script>
-    <script defer src="bodycode.js"></script>
+    <script src="bodycode.js" defer></script>
 </head>
 
 <body>
@@ -46,9 +47,8 @@
         </div>
     </div>
     <div id="proxied-content-wrapper" class="none">
-        <div id="omnibox-wrapper">
-
-        </div>
+        <div id="omnibox-wrapper"></div>
+        <div class="loader" id="loader"></div>
         <iframe title="Proxied Content" class="uv-frame" id="uv-frame"></iframe>
     </div>
 </body>

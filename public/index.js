@@ -20,6 +20,7 @@ const error = document.getElementById("uv-error");
  */
 const errorCode = document.getElementById("uv-error-code");
 const connection = new BareMux.BareMuxConnection("/baremux/worker.js")
+const loading_animation = document.getElementById("loader");
 
 form.addEventListener("submit", async (event) => {
     let frame = document.getElementById("uv-frame");
@@ -60,6 +61,12 @@ form.addEventListener("submit", async (event) => {
     }
 
     frame.src = __uv$config.prefix + __uv$config.encodeUrl(url);
+    if (!loading_animation.classList.contains("none")) {
+        iFrameReady(frame, () => {
+            frame.classList.add("loaded-frame");
+            loading_animation.classList.add("none");
+        });
+    }
 });
 let prevLocation = document.getElementById("uv-frame").contentDocument.location.href;
 let x = setInterval(function () {
@@ -72,3 +79,4 @@ let x = setInterval(function () {
 function decodeURL(url) {
     return __uv$config.decodeUrl(url.split(__uv$config.prefix)[1]);
 }
+

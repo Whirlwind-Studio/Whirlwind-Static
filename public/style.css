@@ -48,7 +48,7 @@ body {
     z-index: -2;
     background-color: #fff199;
 
-    background-image: 
+    background-image:
         radial-gradient(at 53% 79%, rgb(80, 156, 255) 0px, transparent 50%),
         radial-gradient(at 74% 14%, rgb(93, 137, 218) 0px, transparent 50%),
         radial-gradient(at 55% 5%, rgb(81, 186, 235) 0px, transparent 50%),
@@ -89,6 +89,22 @@ body {
     position: relative;
     width: min(50rem, 80%);
 }
+
+.loader {
+    position: absolute;
+    top: calc(50% - 3.125rem/2);
+    left: calc(50% - 3.125rem/2);
+    width: 3.125rem;
+    height: 3.125rem;
+    border-radius: 50%;
+    border: 8px solid;
+    border-color: #000 #0000;
+    animation: l1 1s infinite;
+  }
+  @keyframes l1 {to{transform: rotate(.5turn)}}
+
+
+
 .uv-frame {
     position: absolute;
     top: 10%;
@@ -96,6 +112,8 @@ body {
     width: 100%;
     height: 90%;
     border: none;
+}
+.loaded-frame {
     background: white;
 }
 .none {
@@ -110,6 +128,7 @@ body {
     height: 100%;
     display: flex;
 }
+
 #omnibox-wrapper {
     width: 100%;
     height: 10%;
@@ -117,10 +136,12 @@ body {
     justify-content: center;
     align-items: center;
 }
+
 .omnibox {
     width: 90%;
     padding: 3% 0 3% 3%;
 }
+
 .search-input {
     width: 100%;
     height: 35px;
