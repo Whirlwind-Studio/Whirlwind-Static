@@ -1,6 +1,3 @@
-const navbar = document.querySelector('.navbar');
-const notch = document.querySelector('.notch');
-const frame = document.getElementById('uv-frame');
 let hideTimer;
 let isIframeLoaded = false;
 
@@ -34,9 +31,7 @@ function startHideTimer() {
 }
 
 document.addEventListener('touchstart', (e) => {
-    if (e.touches[0].clientY < navbar.offsetHeight) {
-        if (isIframeLoaded) {
-            navbar.classList.remove('hidden');
-        }
+    if (e.touches[0].clientY < navbar.offsetHeight && isIframeLoaded) {
+        navbar.classList.remove('hidden');
     }
 });

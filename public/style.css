@@ -49,13 +49,13 @@ body {
     background-color: #fff199;
 
     background-image:
-        radial-gradient(at 53% 79%, rgb(80, 156, 255) 0px, transparent 50%),
-        radial-gradient(at 74% 14%, rgb(93, 137, 218) 0px, transparent 50%),
-        radial-gradient(at 55% 5%, rgb(81, 186, 235) 0px, transparent 50%),
-        radial-gradient(at 98% 25%, rgb(107, 55, 251) 0px, transparent 50%),
-        radial-gradient(at 56% 24%, rgb(68, 93, 206) 0px, transparent 50%),
-        radial-gradient(at 75% 17%, rgb(42, 53, 209) 0px, transparent 50%),
-        radial-gradient(at 65% 3%, rgb(144, 159, 244) 0px, transparent 50%);
+        radial-gradient(at 53% 79%, rgb(80, 156, 255) 0, transparent 50%),
+        radial-gradient(at 74% 14%, rgb(93, 137, 218) 0, transparent 50%),
+        radial-gradient(at 55% 5%, rgb(81, 186, 235) 0, transparent 50%),
+        radial-gradient(at 98% 25%, rgb(107, 55, 251) 0, transparent 50%),
+        radial-gradient(at 56% 24%, rgb(68, 93, 206) 0, transparent 50%),
+        radial-gradient(at 75% 17%, rgb(42, 53, 209) 0, transparent 50%),
+        radial-gradient(at 65% 3%, rgb(144, 159, 244) 0, transparent 50%);
 
     background-size: 200% 200%;
     animation: gradientAnimation 15s ease infinite;
@@ -77,7 +77,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 1.25rem;
     box-sizing: border-box;
 }
 
@@ -97,27 +97,55 @@ body {
     width: 3.125rem;
     height: 3.125rem;
     border-radius: 50%;
-    border: 8px solid;
+    border: 0.5rem solid;
     border-color: #000 #0000;
     animation: l1 1s infinite;
-  }
-  @keyframes l1 {to{transform: rotate(.5turn)}}
+}
 
-
+@keyframes l1 {
+    to {
+        transform: rotate(.5turn)
+    }
+}
 
 .uv-frame {
     position: absolute;
-    top: 10%;
+    top: max(min(3.4375rem + 2 * 3%, 6.25rem), 5rem); 
     left: 0;
     width: 100%;
     height: 90%;
     border: none;
 }
+
 .loaded-frame {
     background: white;
 }
+
 .none {
     display: none !important;
+}
+
+.navigator-wrapper {
+    margin-left: 1%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-icon {
+    fill: white;
+    width: 2rem;
+    height: 2rem;
+    stroke-linejoin: bevel;
+    stroke-width: 0.25rem;
+    padding: 0.25rem;
+}
+
+.nav-icon:hover {
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+
+
 }
 
 .fullscreen {
@@ -131,7 +159,7 @@ body {
 
 #omnibox-wrapper {
     width: 100%;
-    height: 10%;
+    height: max(min(3.4375rem + 2 * 3%, 6.25rem), 5rem);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -139,21 +167,21 @@ body {
 
 .omnibox {
     width: 90%;
-    padding: 3% 0 3% 3%;
+    padding: 3% 0 3% 1%;
 }
 
 .search-input {
     width: 100%;
-    height: 35px;
-    padding: 10px 20px;
+    height: 2.1875rem;
+    padding: 0.625rem 1.25rem;
     border: none;
-    border-radius: 25px;
-    font-size: 16px;
+    border-radius: 1.5625rem;
+    font-size: 1rem;
     outline: none;
     background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(0.625rem);
+    -webkit-backdrop-filter: blur(0.625rem);
+    box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
     transition: background 0.3s, box-shadow 0.3s;
     color: rgb(255, 255, 255);
 }
@@ -164,20 +192,20 @@ body {
 
 .search-input:focus {
     background: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0.375rem 0.5rem rgba(0, 0, 0, 0.15);
 }
 
 .navbar {
-    border-bottom-left-radius: 18px;
+    border-bottom-left-radius: 1.125rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 10px 20px;
+    padding: 0.625rem 1.25rem;
     background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(0.625rem);
+    -webkit-backdrop-filter: blur(0.625rem);
+    box-shadow: 0 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
     position: fixed;
     top: 0;
     left: 0;
@@ -186,7 +214,7 @@ body {
 }
 
 .logo {
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: bold;
     color: #fff;
 }
@@ -204,8 +232,8 @@ body {
 }
 
 .settings-button img {
-    width: 35px;
-    height: 35px;
+    width: 2.1875rem;
+    height: 2.1875rem;
 }
 
 .settings-button:hover img {
@@ -213,9 +241,9 @@ body {
 }
 
 .logo img {
-    width: 35px;
-    height: 35px;
-    padding: 0px;
+    width: 2.1875rem;
+    height: 2.1875rem;
+    padding: 0;
 }
 
 
@@ -224,15 +252,15 @@ body {
 }
 
 .notch {
-    width: 50px;
-    height: 5px;
+    width: 3.125rem;
+    height:0 .3125rem;
     background-color: rgba(255, 255, 255, 0.5);
     position: fixed;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 0.3125rem;
+    border-bottom-right-radius: 0.3125rem;
     z-index: 1001;
     cursor: pointer;
 }

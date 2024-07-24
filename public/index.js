@@ -1,30 +1,41 @@
 "use strict";
-/**
- * @type {HTMLFormElement}
- */
 const form = document.getElementById("uv-form");
-/**
- * @type {HTMLInputElement}
- */
 const address = document.getElementById("uv-address");
-/**
- * @type {HTMLInputElement}
- */
 const searchEngine = document.getElementById("uv-search-engine");
-/**
- * @type {HTMLParagraphElement}
- */
 const error = document.getElementById("uv-error");
-/**
- * @type {HTMLPreElement}
- */
 const errorCode = document.getElementById("uv-error-code");
 const connection = new BareMux.BareMuxConnection("/baremux/worker.js")
 const loading_animation = document.getElementById("loader");
+const frame = document.getElementById("uv-frame");
+const navbar = document.getElementById('navbar');
+const notch = document.getElementById("notch");
+const settings = document.getElementById("settings");
+const reload = document.getElementById("reload");
+const back = document.getElementById("back");
+const forward = document.getElementById("forward");
 
-form.addEventListener("submit", async (event) => {
-    let frame = document.getElementById("uv-frame");
-    event.preventDefault();
+form.addEventListener("submit", formSubmit);
+reload.addEventListener("click", function () {
+    formSubmit(null, decodeURL(frame.contentDocument.location.href));
+});
+back.addEventListener("click", function () {
+    frame.contentWindow.history.back();
+});
+
+forward.addEventListener("click", function () {
+    frame.contentWindow.history.forward();
+})
+
+let prevLocation = frame.contentDocument.location.href;
+let x = setInterval(function () {
+    if (prevLocation != frame.contentDocument.location.href) {
+        address.value = decodeURL(frame.contentDocument.location.href);
+        prevLocation = frame.contentDocument.location.href;
+    }
+}, 50);
+
+async function formSubmit(event, input_url) {
+    if (event ?? false) event.preventDefault();
 
     let is_search_bar = form.dataset.isSearchBar === "true";
 
@@ -36,7 +47,8 @@ form.addEventListener("submit", async (event) => {
         throw err;
     }
 
-    let url = search(address.value, searchEngine.value).url;
+    let url = input_url ?? search(address.value, searchEngine.value).url;
+
 
     if (is_search_bar) {
         let proxied_wrapper = document.getElementById("proxied-content-wrapper");
@@ -47,12 +59,10 @@ form.addEventListener("submit", async (event) => {
         form.classList.add("omnibox");
         form.dataset.isSearchBar = "false";
 
-        document.getElementById("notch").classList.add("none");
-        let navbar = document.getElementById("navbar");
+        notch.classList.add("none");
         navbar.classList.add("none");
 
-        let settings = navbar.getElementsByClassName("settings")[0];
-        omnibox_wrapper.appendChild(settings)
+        omnibox_wrapper.appendChild(settings);
     }
 
     let wispUrl = (location.protocol === "https:" ? "wss" : "ws") + "://" + location.host + "/wisp/";
@@ -67,15 +77,8 @@ form.addEventListener("submit", async (event) => {
             loading_animation.classList.add("none");
         });
     }
-});
-let prevLocation = document.getElementById("uv-frame").contentDocument.location.href;
-let x = setInterval(function () {
-    let frame = document.getElementById("uv-frame");
-    if (prevLocation != frame.contentDocument.location.href) {
-        document.getElementById("uv-address").value = decodeURL(frame.contentDocument.location.href);
-        prevLocation = frame.contentDocument.location.href;
-    }
-}, 50);
+}
+
 function decodeURL(url) {
     return __uv$config.decodeUrl(url.split(__uv$config.prefix)[1]);
 }
