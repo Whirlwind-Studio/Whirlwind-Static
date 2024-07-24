@@ -1,5 +1,5 @@
 :root {
-    --omnibox-wrapper-size: max(min(3.4375rem + 2 * 3%, 6.25rem), 5rem);
+    --omnibox-wrapper-size: clamp(5rem, 3.4375rem + 2 * 3%,  6.25rem);
 }
 html,
 body {
