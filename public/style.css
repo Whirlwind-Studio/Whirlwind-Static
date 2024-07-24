@@ -110,7 +110,7 @@ body {
 
 .uv-frame {
     position: absolute;
-    top: 10%;
+    top: max(min(3.4375rem + 2 * 3%, 6.25rem), 5rem); 
     left: 0;
     width: 100%;
     height: 90%;
@@ -159,7 +159,7 @@ body {
 
 #omnibox-wrapper {
     width: 100%;
-    height: 10%;
+    height: max(min(3.4375rem + 2 * 3%, 6.25rem), 5rem);
     display: flex;
     justify-content: center;
     align-items: center;
