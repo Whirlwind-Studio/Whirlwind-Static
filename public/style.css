@@ -196,6 +196,7 @@ body {
     color: white;
     gap: 0.5rem;
     padding: 0.5rem;
+    cursor: default;
 }
 .bookmark:hover {
     border-radius: 1rem;
