@@ -28,7 +28,7 @@ bookmark_star.addEventListener("click", function () {
     if (favicon === null) {
         favicon = (new URL(decodeURL(frame.contentWindow.location.href))).origin + "/favicon.ico";
     }
-    let x = {favicon_url: favicon, name: frame.contentDocument.title, url: decodeURL(frame.contentWindow.location.href)};
+    let x = { favicon_url: favicon, name: frame.contentDocument.title, url: decodeURL(frame.contentWindow.location.href) };
     bookmarks.push(x);
     updateBookmarks(window.localStorage, bookmarks);
     bookmark_star.classList.add("none");
@@ -48,7 +48,7 @@ bookmark_star_filled.addEventListener("click", function () {
             bookmarks.splice(i, 1);
         }
     }
-    
+
     updateBookmarks(window.localStorage, bookmarks);
 
     bookmark_star.classList.remove("none");
@@ -83,7 +83,7 @@ let x = setInterval(function () {
             bookmark_star.classList.remove("none");
         }
         prevLocation = frame.contentDocument.location.href;
-        
+
         frame.contentDocument.addEventListener("dragover", function (e) {
             e.preventDefault();
         })
@@ -164,12 +164,34 @@ address.addEventListener("drop", function (e) {
     e.preventDefault();
     address.value = e.dataTransfer.getData("text/plain");
 });
-address.addEventListener("dragover", function (e) {
+address.addEventListener("dragenter", function (e) {
     e.preventDefault();
     address.select();
 });
 
+address.addEventListener("dragleave", function (e) {
+    e.preventDefault();
+    document.getSelection().removeAllRanges();
+});
 
+function divider(x) {
+    return `<span class="bookmark-divider vhidden" id="divider_${x}"><svg id="chart" width="0.25rem" height="2rem"><line x1="0" y1="0" x2="0" y2="32" class="vertical-bar"></line></svg></span>`;
+}
+
+function listenersForDivider(el) {
+    el.addEventListener("dragenter", function (e) {
+        console.log(`entered divider ${el.id}`);
+        e.preventDefault();
+        el.classList.remove("vhidden");
+    });
+    el.addEventListener("drop", function (e) {
+        e.preventDefault();
+    });
+    el.addEventListener("dragleave", function (e) {
+        e.preventDefault();
+        el.classList.add("vhidden");
+    });
+}
 
 function updateBookmarks(storage, input_bookmarks) {
     if (storage.getItem("bookmarks") === null) {
@@ -179,8 +201,10 @@ function updateBookmarks(storage, input_bookmarks) {
         storage.setItem("bookmarks", JSON.stringify(input_bookmarks));
     }
     bookmarks = JSON.parse(storage.getItem("bookmarks"));
-    bookmarks_wrapper.innerHTML = "";
-    for (let [i,x] of enumerate(bookmarks)) {
+    bookmarks_wrapper.innerHTML = divider(0);
+
+    for (let [i, x] of enumerate(bookmarks)) {
+
         let el = document.createElement("span");
         el.classList.add("bookmark");
         el.draggable = true;
@@ -189,47 +213,127 @@ function updateBookmarks(storage, input_bookmarks) {
         img.alt = "bookmark favicon";
         img.classList.add("bookmark-favicon");
         img.classList.add("bookmark-favicon-waiting");
+        img.draggable = false;
 
         el.appendChild(img);
-        el.innerHTML += x.name;
+        el.insertAdjacentText("beforeend", x.name);
         el.dataset.url = x.url;
         el.id = `${bookmark_id_prefix}${i}`
-        
-        el.ondragstart = function (e) {
+
+        el.addEventListener("dragstart", function (e) {
             e.currentTarget.classList.add("dragging");
             e.dataTransfer.clearData();
             e.dataTransfer.setData("text/plain", e.target.dataset.url);
             e.dataTransfer.setData("text/id", e.target.id);
-        }
+
+            // This is needed because during drag events the data is always empty string but the type is visible
+            e.dataTransfer.setData(`text/whirlwind_bookmark_id__${e.target.id}`, "")
+        });
+        el.addEventListener("dragend", function (e) {
+            e.currentTarget.classList.remove("dragging");
+        });
 
         let loader = document.createElement("iframe");
         loader.src = encodeURL(x.favicon_url);
-        loader.onload = function () {
-            try {
-                let image = loader.contentDocument.getElementsByTagName("img")[0];
-                let c = document.createElement("canvas");
-                c.width = image.naturalWidth;
-                c.height = image.naturalHeight;
-                c.getContext("2d").drawImage(image, 0, 0);
-                c.toBlob(function (blob) {
-                    if (blob !== null) {
-                        img.src = URL.createObjectURL(blob);
-                        img.classList.remove("bookmark-favicon-waiting");
-                        el.removeChild(el.firstChild);
-                        el.insertBefore(img, el.firstChild);
-                        window.addEventListener("beforeunload", function () {
-                            URL.revokeObjectURL(blob);
-                        });
-                    }
-                    loader.remove();
-                })
-            } catch {
-                console.warn("failed to load favicon (cross platform issue?)");
+        loader.onload = () => getFavicons(loader, img, el);
+        document.getElementById("favicon-loaders").appendChild(loader);
+
+        bookmarks_wrapper.appendChild(el);
+        bookmarks_wrapper.insertAdjacentHTML("beforeend", divider(i + 1));
+        el.onclick = () => formSubmit(null, el.dataset.url);
+    }
+    bookmarks_wrapper.addEventListener("dragover", function (e) {
+        e.preventDefault();
+        findClosest(e, function (closest, closestDistance, closestDimensions) {
+            findDividerTarget(closestDistance, e, closest, () => closest.classList.remove("vhidden"));
+        });
+    });
+    bookmarks_wrapper.addEventListener("dragleave", function(e) {
+        for (let x of document.getElementsByClassName("bookmark-divider")) {
+            x.classList.add("vhidden");
+        }
+    });
+    bookmarks_wrapper.addEventListener("drop", function (e) {
+        findClosest(e, function (closest, closestDistance) {
+            findDividerTarget(closestDistance, e, closest, function (e, closest, origin) {
+                let i = parseInt(origin.id.substring(bookmark_id_prefix.length));
+                array_move(bookmarks, i, parseInt(closest.id.substring("divider_".length)));
+                updateBookmarks(window.localStorage, bookmarks);
+            });
+        });
+    })
+}
+
+function array_move(arr, old_index, new_index) {
+    if (new_index >= arr.length) {
+        var k = new_index - arr.length + 1;
+        while (k--) {
+            arr.push(undefined);
+        }
+    }
+    arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+    return arr;
+}
+
+function findDividerTarget(closestDistance, e, closest, callback) {
+    if (closestDistance < Math.hypot(e.target.clientWidth, e.target.clientHeight)) {
+        let x = null;
+        for (let tmp of e.dataTransfer.types) {
+            if (tmp.startsWith("text/whirlwind_bookmark_id__")) {
+                x = document.getElementById(tmp.substring("text/whirlwind_bookmark_id__".length));
             }
         }
-        document.getElementById("favicon-loaders").appendChild(loader);
-        bookmarks_wrapper.appendChild(el);
-        el.onclick = () => formSubmit(null, el.dataset.url);
+        if (!(x.previousElementSibling.id == closest.id
+            || x.nextElementSibling.id == closest.id))
+            callback(e, closest, x);
+    }
+}
+
+function findClosest(e, callback) {
+    let closest = null;
+    let closestDistance = Infinity;
+    let closestDimensions = null;
+    for (let divider of document.getElementsByClassName("bookmark-divider")) {
+        divider.classList.add("vhidden");
+        let box = divider.getBoundingClientRect();
+        let x = (box.left + box.right) / 2;
+        let y = (box.top + box.bottom) / 2;
+        let distance = Math.hypot(e.clientX - x, e.clientY - y);
+        if (distance < closestDistance) {
+            closestDistance = distance;
+            closest = divider;
+            closestDimensions = box;
+        }
+    }
+    if (closest !== null) {
+        callback(closest, closestDistance, closestDimensions);
+    }
+}
+
+function getFavicons(loader, img, el) {
+    try {
+        let image = loader.contentDocument.getElementsByTagName("img")[0];
+        let c = document.createElement("canvas");
+        c.width = image.naturalWidth;
+        c.height = image.naturalHeight;
+        c.getContext("2d").drawImage(image, 0, 0);
+        c.toBlob(function (blob) {
+            if (blob !== null) {
+                console.log(img);
+                img.src = URL.createObjectURL(blob);
+                img.classList.remove("bookmark-favicon-waiting");
+                el.removeChild(el.firstChild);
+                el.insertBefore(img, el.firstChild);
+                window.addEventListener("beforeunload", function () {
+                    URL.revokeObjectURL(blob);
+                });
+                document.getElementById(el.id).innerHTML = el.innerHTML;
+            }
+            loader.remove();
+        });
+    } catch (error) {
+        console.warn("failed to load favicon (cross platform issue?)");
+        console.log(error);
     }
 }
 
