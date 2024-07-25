@@ -183,6 +183,7 @@ function updateBookmarks(storage, input_bookmarks) {
                 c.toBlob(function (blob) {
                     if (blob !== null) {
                         img.src = URL.createObjectURL(blob);
+                        img.classList.remove("bookmark-favicon-waiting");
                         el.removeChild(el.firstChild);
                         el.insertBefore(img, el.firstChild);
                         window.addEventListener("beforeunload", function () {
