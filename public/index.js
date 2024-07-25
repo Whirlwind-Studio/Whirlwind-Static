@@ -16,8 +16,43 @@ const forward = document.getElementById("forward");
 const proxied_wrapper = document.getElementById("proxied-content-wrapper");
 const omnibox_wrapper = document.getElementById("omnibox-wrapper");
 const bookmarks_wrapper = document.getElementById("bookmarks-wrapper");
+const bookmark_star = document.getElementById("bookmark-star");
+const bookmark_star_filled = document.getElementById("filled-star");
 
 const bookmarks_enabled_by_default = false;
+let bookmarks;
+
+bookmark_star.addEventListener("click", function () {
+    let favicon = get_favicon_html(frame.contentDocument);
+    if (favicon === null) {
+        favicon = (new URL(decodeURL(frame.contentWindow.location.href))).origin;
+    }
+    let x = {favicon_url: favicon, name: frame.contentDocument.title, url: decodeURL(frame.contentWindow.location.href)};
+    bookmarks.push(x);
+    updateBookmarks(window.localStorage, bookmarks);
+    bookmark_star.classList.add("none");
+    bookmark_star_filled.classList.remove("none");
+});
+
+bookmark_star_filled.addEventListener("click", function () {
+    let deletion = [];
+    for (let x of bookmarks) {
+        if (x.url == decodeURL(frame.contentWindow.location.href)) {
+            deletion.push(x);
+        }
+    }
+    for (let x of deletion) {
+        let i;
+        if ((i = bookmarks.indexOf(x)) !== -1) {
+            bookmarks.splice(i, 1);
+        }
+    }
+    
+    updateBookmarks(window.localStorage, bookmarks);
+
+    bookmark_star.classList.remove("none");
+    bookmark_star_filled.classList.add("none");
+})
 
 form.addEventListener("submit", formSubmit);
 reload.addEventListener("click", function () {
@@ -35,6 +70,15 @@ let prevLocation = frame.contentDocument.location.href;
 let x = setInterval(function () {
     if (prevLocation != frame.contentDocument.location.href) {
         address.value = decodeURL(frame.contentDocument.location.href);
+        for (x of bookmarks) {
+            if (x.url == address.value) {
+                bookmark_star.classList.add("none");
+                bookmark_star_filled.classList.remove("none");
+            } else {
+                bookmark_star_filled.classList.add("none");
+                bookmark_star.classList.remove("none");
+            }
+        }
         prevLocation = frame.contentDocument.location.href;
     }
 }, 50);
@@ -83,7 +127,7 @@ function transitionToOmnibox() {
     navbar.classList.add("none");
 
     omnibox_wrapper.appendChild(settings);
-    
+
     let storage = window.localStorage;
     let bookmarks_enabled = storage.getItem("bookmarksEnabled");
 
@@ -101,16 +145,19 @@ function transitionToOmnibox() {
     }
 
     updateBookmarks(storage);
-    
+    bookmark_star.classList.remove("none");
 }
 
 
-function updateBookmarks(storage) {
+function updateBookmarks(storage, input_bookmarks) {
     if (storage.getItem("bookmarks") === null) {
         storage.setItem("bookmarks", "[]");
     }
-
-    let bookmarks = JSON.parse(storage.getItem("bookmarks"));
+    if (input_bookmarks ?? false) {
+        storage.setItem("bookmarks", JSON.stringify(input_bookmarks));
+    }
+    bookmarks = JSON.parse(storage.getItem("bookmarks"));
+    bookmarks_wrapper.innerHTML = "";
     for (let x of bookmarks) {
         let el = document.createElement("span");
         el.classList.add("bookmark");
@@ -137,11 +184,15 @@ function updateBookmarks(storage) {
                     if (blob !== null) {
                         img.src = URL.createObjectURL(blob);
                         el.removeChild(el.firstChild);
-                        el.insertBefore(img, el.firstChild)
+                        el.insertBefore(img, el.firstChild);
+                        window.addEventListener("beforeunload", function () {
+                            URL.revokeObjectURL(blob);
+                        });
                     }
+                    loader.remove();
                 })
             } catch {
-                console.warn("failed to load favicon (cross platform issue?)")
+                console.warn("failed to load favicon (cross platform issue?)");
             }
         }
         document.getElementById("favicon-loaders").appendChild(loader);
@@ -158,8 +209,18 @@ function decodeURL(url) {
     return __uv$config.decodeUrl(url.split(__uv$config.prefix)[1]);
 }
 
-function* enumerate (it, start = 0)
-{ let i = start
-  for (const x of it)
-    yield [i++, x]
+function* enumerate(it, start = 0) {
+    let i = start;
+    for (const x of it)
+        yield [i++, x];
+}
+function get_favicon_html(doc) {
+    let favicon = null;
+    let nodeList = doc.getElementsByTagName("link");
+    for (let i = 0; i < nodeList.length; i++) {
+        if ((nodeList[i].getAttribute("rel") == "icon") || (nodeList[i].getAttribute("rel") == "shortcut icon")) {
+            favicon = nodeList[i].getAttribute("href");
+        }
+    }
+    return favicon;
 }

@@ -38,8 +38,12 @@
             <div class="wave"></div>
             <div class="search-container">
                 <form id="uv-form" data-is-search-bar="true">
-                    <input type="text" id="uv-address" class="search-input" placeholder="Search or enter URL">
-                    <input type="hidden" id="uv-search-engine" value="https://www.google.com/search?q=%s">
+                    <div class="search-input">
+                        <input type="text" id="uv-address" class="search-input" placeholder="Search or enter URL">
+                        <svg id="bookmark-star" class="bookmark-star none" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-350Z"/></svg>
+                        <svg id="filled-star" class="bookmark-star none" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="m233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z"/></svg>
+                        <input type="hidden" id="uv-search-engine" value="https://www.google.com/search?q=%s">
+                    </div>
                 </form>
                 <p id="uv-error"></p>
                 <pre id="uv-error-code"></pre>
@@ -68,17 +72,7 @@
                     </svg>
                 </div>
             </div>
-            <div class="bookmarks-wrapper" id="bookmarks-wrapper">
-                <span class="bookmark" data-url="https://example.com">
-                    
-                    <img alt="favicon-test" src="/favicon.ico" class="bookmark-favicon"/>
-                    Abcdefg
-                </span>
-                <span class="bookmark" data-url="https://www.iana.org/help/example-domains">
-                    <img alt="favicon-test" src="/favicon.ico" class="bookmark-favicon"/>
-                    Hijklmnop
-                </span>
-            </div>
+            <div class="bookmarks-wrapper" id="bookmarks-wrapper"></div>
         </div>
         <iframe title="Proxied Content" class="uv-frame" id="uv-frame"></iframe>
         <div class="loader" id="loader"></div>
