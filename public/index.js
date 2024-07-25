@@ -220,9 +220,9 @@ function* enumerate(it, start = 0) {
 function get_favicon_html(doc) {
     let favicon = null;
     let nodeList = doc.getElementsByTagName("link");
-    for (let i = 0; i < nodeList.length; i++) {
-        if ((nodeList[i].getAttribute("rel") == "icon") || (nodeList[i].getAttribute("rel") == "shortcut icon")) {
-            favicon = nodeList[i].getAttribute("href");
+    for (let element of nodeList) {
+        if ((element.getAttribute("rel") == "icon") || (element.getAttribute("rel") == "shortcut icon")) {
+            favicon = element.getAttribute("href");
         }
     }
     return favicon;
