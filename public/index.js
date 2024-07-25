@@ -25,7 +25,7 @@ let bookmarks;
 bookmark_star.addEventListener("click", function () {
     let favicon = get_favicon_html(frame.contentDocument);
     if (favicon === null) {
-        favicon = (new URL(decodeURL(frame.contentWindow.location.href))).origin;
+        favicon = (new URL(decodeURL(frame.contentWindow.location.href))).origin + "/favicon.ico";
     }
     let x = {favicon_url: favicon, name: frame.contentDocument.title, url: decodeURL(frame.contentWindow.location.href)};
     bookmarks.push(x);
