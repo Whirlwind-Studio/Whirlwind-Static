@@ -70,14 +70,16 @@ let prevLocation = frame.contentDocument.location.href;
 let x = setInterval(function () {
     if (prevLocation != frame.contentDocument.location.href) {
         address.value = decodeURL(frame.contentDocument.location.href);
-        for (x of bookmarks) {
-            if (x.url == address.value) {
-                bookmark_star.classList.add("none");
-                bookmark_star_filled.classList.remove("none");
-            } else {
-                bookmark_star_filled.classList.add("none");
-                bookmark_star.classList.remove("none");
-            }
+        let state = false;
+        for (let x of bookmarks) {
+            state = state || x.url == address.value;
+        }
+        if (state) {
+            bookmark_star.classList.add("none");
+            bookmark_star_filled.classList.remove("none");
+        } else {
+            bookmark_star_filled.classList.add("none");
+            bookmark_star.classList.remove("none");
         }
         prevLocation = frame.contentDocument.location.href;
     }
