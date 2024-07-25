@@ -20,6 +20,7 @@ const bookmark_star = document.getElementById("bookmark-star");
 const bookmark_star_filled = document.getElementById("filled-star");
 
 const bookmarks_enabled_by_default = false;
+const bookmark_id_prefix = "bookmark_whirlwind_";
 let bookmarks;
 
 bookmark_star.addEventListener("click", function () {
@@ -82,6 +83,15 @@ let x = setInterval(function () {
             bookmark_star.classList.remove("none");
         }
         prevLocation = frame.contentDocument.location.href;
+        
+        frame.contentDocument.addEventListener("dragover", function (e) {
+            e.preventDefault();
+        })
+
+        frame.contentDocument.addEventListener("drop", function (e) {
+            e.preventDefault();
+            formSubmit(null, e.dataTransfer.getData("text/plain"));
+        })
     }
 }, 50);
 
@@ -150,6 +160,16 @@ function transitionToOmnibox() {
     bookmark_star.classList.remove("none");
 }
 
+address.addEventListener("drop", function (e) {
+    e.preventDefault();
+    address.value = e.dataTransfer.getData("text/plain");
+});
+address.addEventListener("dragover", function (e) {
+    e.preventDefault();
+    address.select();
+});
+
+
 
 function updateBookmarks(storage, input_bookmarks) {
     if (storage.getItem("bookmarks") === null) {
@@ -160,9 +180,10 @@ function updateBookmarks(storage, input_bookmarks) {
     }
     bookmarks = JSON.parse(storage.getItem("bookmarks"));
     bookmarks_wrapper.innerHTML = "";
-    for (let x of bookmarks) {
+    for (let [i,x] of enumerate(bookmarks)) {
         let el = document.createElement("span");
         el.classList.add("bookmark");
+        el.draggable = true;
 
         let img = document.createElement("img");
         img.alt = "bookmark favicon";
@@ -172,6 +193,14 @@ function updateBookmarks(storage, input_bookmarks) {
         el.appendChild(img);
         el.innerHTML += x.name;
         el.dataset.url = x.url;
+        el.id = `${bookmark_id_prefix}${i}`
+        
+        el.ondragstart = function (e) {
+            e.currentTarget.classList.add("dragging");
+            e.dataTransfer.clearData();
+            e.dataTransfer.setData("text/plain", e.target.dataset.url);
+            e.dataTransfer.setData("text/id", e.target.id);
+        }
 
         let loader = document.createElement("iframe");
         loader.src = encodeURL(x.favicon_url);

@@ -198,7 +198,7 @@ body {
     padding: 0.5rem;
     cursor: default;
 }
-.bookmark:hover {
+.bookmark:hover:not(.dragging){
     border-radius: 1rem;
     background-color: rgba(255, 255, 255, 0.3);
 }
@@ -249,6 +249,9 @@ body {
     transition: none;
     
 }
+#uv-address::selection {
+    background-color: lightblue;
+}
 
 .bookmark-star {
     width: 2rem;
@@ -268,6 +271,7 @@ body {
 .search-input:focus {
     background: rgba(255, 255, 255, 0.3);
     box-shadow: 0 0.375rem 0.5rem rgba(0, 0, 0, 0.15);
+    border: lightblue;
 }
 
 .navbar {
