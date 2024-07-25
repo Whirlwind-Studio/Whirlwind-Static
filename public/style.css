@@ -1,5 +1,7 @@
 :root {
-    --omnibox-wrapper-size: clamp(5rem, 3.4375rem + 2 * 3%,  6.25rem);
+    --omnibox-wrapper-size: clamp(5rem, 3.4375rem + 2 * 3%,  6rem);
+    --toolbar-size: var(--omnibox-wrapper-size);
+    --bookmarks-display: none;
 }
 html,
 body {
@@ -113,10 +115,10 @@ body {
 
 .uv-frame {
     position: absolute;
-    top: var(--omnibox-wrapper-size); 
+    top: var(--toolbar-size); 
     left: 0;
     width: 100%;
-    height: calc(100% - var(--omnibox-wrapper-size));
+    height: calc(100% - var(--toolbar-size));
     border: none;
 }
 
@@ -129,7 +131,7 @@ body {
 }
 
 .navigator-wrapper {
-    margin-left: 1%;
+    margin: 1%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -149,26 +151,69 @@ body {
     background-color: rgba(255, 255, 255, 0.3);
 }
 
+.with-bookmarks {
+    --toolbar-size: calc(var(--omnibox-wrapper-size) + 2.5rem);
+    --bookmarks-display: flex;
+}
+
 .fullscreen {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     display: flex;
 }
 
-#omnibox-wrapper {
+.toolbar-wrapper {
     width: 100%;
-    height: var(--omnibox-wrapper-size);
     display: flex;
+    height: var(--toolbar-size);
+    flex-wrap: wrap;
+    align-content: space-evenly;
+}
+
+.bookmarks-wrapper {
+    width: 100%;
+    height: 2rem;
+    display: var(--bookmarks-display);
+    align-items: center;
+    justify-content: left;
+    gap: 1rem;
+    margin: 0 1rem 0.75rem;
+    align-self: start;
+}
+
+.bookmark-favicon {
+    width: 1.5rem;
+    height: 1.5rem;
+    border: none;
+}
+
+.bookmark {
+    display: flex;
+    align-items: center;
+    color: white;
+    gap: 0.5rem;
+    padding: 0.5rem;
+}
+.bookmark:hover {
+    border-radius: 1rem;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+.bookmark-favicon-waiting {
+    display: hidden;
+}
+.omnibox-wrapper {
+    width: 100%;
+    display: flex;
+    height: var(--omnibox-wrapper-size);
     justify-content: center;
     align-items: center;
 }
 
 .omnibox {
     width: 90%;
-    padding: 3% 0 3% 1%;
 }
 
 .search-input {
