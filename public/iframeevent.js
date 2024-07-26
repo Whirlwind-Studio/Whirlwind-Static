@@ -1,6 +1,6 @@
 // Code modified from https://stackoverflow.com/a/24603642 in the Further Edit section
 // This function ONLY works for iFrames of the same origin as their parent
-function iFrameReady(iFrame, fn) {
+function iFrameReady(iFrame, fn, use_mutation) {
     let timer, fired = false;
 
     function ready() {
@@ -34,13 +34,15 @@ function iFrameReady(iFrame, fn) {
                 doc.addEventListener("DOMContentLoaded", ready);
                 doc.addEventListener("readystatechange", readyState);
                 // observe iFrame for first paint and first contentful paint
-                let Observer = doc.defaultView.PerformanceObserver;
-                let obv = new Observer(function (x) {
-                    if (x.getEntries().length > 0) {
-                        ready.call(doc);
-                    }
-                })
-                obv.observe({ type: "paint" });
+                if (use_mutation) {
+                    let Observer = doc.defaultView.PerformanceObserver;
+                    let obv = new Observer(function (x) {
+                        if (x.getEntries().length > 0) {
+                            ready.call(doc);
+                        }
+                    })
+                    obv.observe({ type: "paint" });
+                }
             }
         } else {
             // still same old original document, so keep looking for content or new document

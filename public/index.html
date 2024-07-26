@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A fast and minimal proxy designed to allow users to avoid censorship.">
     <title>Whirlwind</title>
     <link rel="stylesheet" href="style.css" />
     <script src="baremux/index.js" defer></script>
@@ -38,8 +39,12 @@
             <div class="wave"></div>
             <div class="search-container">
                 <form id="uv-form" data-is-search-bar="true">
-                    <input type="text" id="uv-address" class="search-input" placeholder="Search or enter URL">
-                    <input type="hidden" id="uv-search-engine" value="https://www.google.com/search?q=%s">
+                    <div class="search-input">
+                        <input type="text" id="uv-address" class="search-input" placeholder="Search or enter URL">
+                        <svg id="bookmark-star" class="bookmark-star none" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-350Z"/></svg>
+                        <svg id="filled-star" class="bookmark-star none" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="m233-120 65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Z"/></svg>
+                        <input type="hidden" id="uv-search-engine" value="https://www.google.com/search?q=%s">
+                    </div>
                 </form>
                 <p id="uv-error"></p>
                 <pre id="uv-error-code"></pre>
@@ -47,28 +52,33 @@
         </div>
     </div>
     <div id="proxied-content-wrapper" class="none">
-        <div id="omnibox-wrapper">
-            <div class="navigator-wrapper">
-                <svg class="nav-icon" id="back" xmlns="http://www.w3.org/2000/svg" height="1.5rem" viewBox="0 0 24 24"
-                    width="1.5rem" fill="#FFFFFF">
-                    <path d="M0 0h24v24H0V0z" fill="none" />
-                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
-                </svg>
-                <svg class="nav-icon" id="reload" xmlns="http://www.w3.org/2000/svg" height="1.5rem" viewBox="0 0 24 24"
-                    width="1.5rem" fill="#FFFFFF">
-                    <path d="M0 0h24v24H0V0z" fill="none" />
-                    <path
-                        d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
-                </svg>
-                <svg class="nav-icon" id="forward" xmlns="http://www.w3.org/2000/svg" height="1.5rem" viewBox="0 0 24 24"
-                    width="1.5rem" fill="#FFFFFF">
-                    <path d="M0 0h24v24H0V0z" fill="none" />
-                    <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z" />
-                </svg>
+        <div class="toolbar-wrapper" id="toolbar-wrapper">
+            <div class="omnibox-wrapper" id="omnibox-wrapper">
+                <div class="navigator-wrapper">
+                    <svg class="nav-icon" id="back" xmlns="http://www.w3.org/2000/svg" height="1.5rem"
+                        viewBox="0 0 24 24" width="1.5rem" fill="#FFFFFF">
+                        <path d="M0 0h24v24H0V0z" fill="none" />
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+                    </svg>
+                    <svg class="nav-icon" id="forward" xmlns="http://www.w3.org/2000/svg" height="1.5rem"
+                        viewBox="0 0 24 24" width="1.5rem" fill="#FFFFFF">
+                        <path d="M0 0h24v24H0V0z" fill="none" />
+                        <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z" />
+                    </svg>
+                    <svg class="nav-icon" id="reload" xmlns="http://www.w3.org/2000/svg" height="1.5rem"
+                        viewBox="0 0 24 24" width="1.5rem" fill="#FFFFFF">
+                        <path d="M0 0h24v24H0V0z" fill="none" />
+                        <path
+                            d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
+                    </svg>
+                </div>
             </div>
+            <div class="bookmarks-wrapper" id="bookmarks-wrapper"></div>
         </div>
-        <div class="loader" id="loader"></div>
         <iframe title="Proxied Content" class="uv-frame" id="uv-frame"></iframe>
+        <div class="loader" id="loader"></div>
+    </div>
+    <div id="favicon-loaders" class="none">
     </div>
 </body>
 
