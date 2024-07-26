@@ -24,11 +24,12 @@ const bookmark_id_prefix = "bookmark_whirlwind_";
 let bookmarks;
 
 bookmark_star.addEventListener("click", function () {
-    let favicon = get_favicon_html(frame.contentDocument);
+    const location = decodeURL(frame.contentWindow.location.href);
+    let favicon = URL.parse(get_favicon_html(frame.contentDocument), location);
     if (favicon === null) {
-        favicon = (new URL(decodeURL(frame.contentWindow.location.href))).origin + "/favicon.ico";
+        favicon = URL.parse(location).origin + "/favicon.ico";
     }
-    let x = { favicon_url: favicon, name: frame.contentDocument.title, url: decodeURL(frame.contentWindow.location.href) };
+    let x = { favicon_url: favicon, name: frame.contentDocument.title, url: location };
     bookmarks.push(x);
     updateBookmarks(window.localStorage, bookmarks);
     bookmark_star.classList.add("none");
