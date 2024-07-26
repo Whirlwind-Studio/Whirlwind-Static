@@ -246,7 +246,7 @@ function updateBookmarks(storage, input_bookmarks) {
             findDividerTarget(closestDistance, e, closest, () => closest.classList.remove("vhidden"));
         });
     });
-    bookmarks_wrapper.addEventListener("dragleave", function(e) {
+    bookmarks_wrapper.addEventListener("dragleave", function (e) {
         for (let x of document.getElementsByClassName("bookmark-divider")) {
             x.classList.add("vhidden");
         }
@@ -306,7 +306,15 @@ function findClosest(e, callback) {
     }
 }
 
-function getFavicons(loader, img, el) {
+function encodeURL(url) {
+    return __uv$config.prefix + __uv$config.encodeUrl(url);
+}
+
+function decodeURL(url) {
+    return __uv$config.decodeUrl(url.split(__uv$config.prefix)[1]);
+}
+
+function getFavicons(loader, img, el, x) {
     try {
         let image = loader.contentDocument.getElementsByTagName("img")[0];
         let c = document.createElement("canvas");
@@ -315,7 +323,10 @@ function getFavicons(loader, img, el) {
         c.getContext("2d").drawImage(image, 0, 0);
         c.toBlob(function (blob) {
             if (blob !== null) {
-                setFaviconImageHelper(img, blob, el);
+
+                storeToCache(x, blob);
+
+                setFaviconImageHelper(URL.createObjectURL(blob), img, el);
 
                 window.addEventListener("beforeunload", function () {
                     URL.revokeObjectURL(blob);
@@ -329,19 +340,12 @@ function getFavicons(loader, img, el) {
     }
 }
 
-function encodeURL(url) {
-    return __uv$config.prefix + __uv$config.encodeUrl(url);
+function storeToCache(x, blob) {
+    blobToBase64(blob).then(result => {
+        window.localStorage.setItem(`favicon_cache__${x.favicon_url}`, result);
+    });
 }
 
-function decodeURL(url) {
-    return __uv$config.decodeUrl(url.split(__uv$config.prefix)[1]);
-}
-
-function* enumerate(it, start = 0) {
-    let i = start;
-    for (const x of it)
-        yield [i++, x];
-}
 function get_favicon_html(doc) {
     let favicon = null;
     let nodeList = doc.getElementsByTagName("link");
@@ -353,20 +357,46 @@ function get_favicon_html(doc) {
     return favicon;
 }
 
-function setFavicon(x, img, el) {
-    if (window.localStorage.getItem(`favicon_cache__${x.favicon_url}`)) {
+function blobToBase64(blob) {
+    return new Promise((resolve, _) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+    });
+}
 
+function setFavicon(x, img, el) {
+    let cached = window.localStorage.getItem(`favicon_cache__${x.favicon_url}`);
+    if (cached ?? false) {
+        fetch(cached)
+            .then(res => res.blob())
+            .then(blob => {
+                setFaviconImageHelper(URL.createObjectURL(blob), img, el);
+
+                window.addEventListener("beforeunload", function () {
+                    URL.revokeObjectURL(blob);
+                });
+
+            });
+        return;
     }
     let loader = document.createElement("iframe");
     loader.src = encodeURL(x.favicon_url);
-    loader.onload = () => getFavicons(loader, img, el);
+    loader.onload = () => getFavicons(loader, img, el, x);
     document.getElementById("favicon-loaders").appendChild(loader);
 }
 
-function setFaviconImageHelper(img, blob, el) {
-    img.src = URL.createObjectURL(blob);
+function setFaviconImageHelper(src, img, el) {
+    img.src = src;
     img.classList.remove("bookmark-favicon-waiting");
     el.removeChild(el.firstChild);
     el.insertBefore(img, el.firstChild);
     document.getElementById(el.id).innerHTML = el.innerHTML;
+}
+
+
+function* enumerate(it, start = 0) {
+    let i = start;
+    for (const x of it)
+        yield [i++, x];
 }
