@@ -234,10 +234,7 @@ function updateBookmarks(storage, input_bookmarks) {
             e.currentTarget.classList.remove("dragging");
         });
 
-        let loader = document.createElement("iframe");
-        loader.src = encodeURL(x.favicon_url);
-        loader.onload = () => getFavicons(loader, img, el);
-        document.getElementById("favicon-loaders").appendChild(loader);
+        setFavicon(x, img, el);
 
         bookmarks_wrapper.appendChild(el);
         bookmarks_wrapper.insertAdjacentHTML("beforeend", divider(i + 1));
@@ -264,6 +261,7 @@ function updateBookmarks(storage, input_bookmarks) {
         });
     })
 }
+
 
 function array_move(arr, old_index, new_index) {
     if (old_index < new_index) {
@@ -317,14 +315,11 @@ function getFavicons(loader, img, el) {
         c.getContext("2d").drawImage(image, 0, 0);
         c.toBlob(function (blob) {
             if (blob !== null) {
-                img.src = URL.createObjectURL(blob);
-                img.classList.remove("bookmark-favicon-waiting");
-                el.removeChild(el.firstChild);
-                el.insertBefore(img, el.firstChild);
+                setFaviconImageHelper(img, blob, el);
+
                 window.addEventListener("beforeunload", function () {
                     URL.revokeObjectURL(blob);
                 });
-                document.getElementById(el.id).innerHTML = el.innerHTML;
             }
             loader.remove();
         });
@@ -356,4 +351,22 @@ function get_favicon_html(doc) {
         }
     }
     return favicon;
+}
+
+function setFavicon(x, img, el) {
+    if (window.localStorage.getItem(`favicon_cache__${x.favicon_url}`)) {
+
+    }
+    let loader = document.createElement("iframe");
+    loader.src = encodeURL(x.favicon_url);
+    loader.onload = () => getFavicons(loader, img, el);
+    document.getElementById("favicon-loaders").appendChild(loader);
+}
+
+function setFaviconImageHelper(img, blob, el) {
+    img.src = URL.createObjectURL(blob);
+    img.classList.remove("bookmark-favicon-waiting");
+    el.removeChild(el.firstChild);
+    el.insertBefore(img, el.firstChild);
+    document.getElementById(el.id).innerHTML = el.innerHTML;
 }
