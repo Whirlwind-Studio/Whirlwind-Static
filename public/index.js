@@ -265,11 +265,8 @@ function updateBookmarks(storage, input_bookmarks) {
 }
 
 function array_move(arr, old_index, new_index) {
-    if (new_index >= arr.length) {
-        var k = new_index - arr.length + 1;
-        while (k--) {
-            arr.push(undefined);
-        }
+    if (old_index < new_index) {
+        new_index -= 1;
     }
     arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
     return arr;
@@ -319,7 +316,6 @@ function getFavicons(loader, img, el) {
         c.getContext("2d").drawImage(image, 0, 0);
         c.toBlob(function (blob) {
             if (blob !== null) {
-                console.log(img);
                 img.src = URL.createObjectURL(blob);
                 img.classList.remove("bookmark-favicon-waiting");
                 el.removeChild(el.firstChild);
