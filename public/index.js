@@ -25,7 +25,7 @@ let bookmarks;
 
 bookmark_star.addEventListener("click", function () {
     const location = decodeURL(frame.contentWindow.location.href);
-    let favicon = URL.parse(get_favicon_html(frame.contentDocument), location);
+    let favicon = URL.parse(getFaviconHTML(frame.contentDocument), location);
     if (favicon === null) {
         favicon = URL.parse(location).origin + "/favicon.ico";
     }
@@ -255,7 +255,7 @@ function updateBookmarks(storage, input_bookmarks) {
         findClosest(e, function (closest, closestDistance) {
             findDividerTarget(closestDistance, e, closest, function (e, closest, origin) {
                 let i = parseInt(origin.id.substring(bookmark_id_prefix.length));
-                array_move(bookmarks, i, parseInt(closest.id.substring("divider_".length)));
+                arrayMove(bookmarks, i, parseInt(closest.id.substring("divider_".length)));
                 updateBookmarks(window.localStorage, bookmarks);
             });
         });
@@ -263,7 +263,7 @@ function updateBookmarks(storage, input_bookmarks) {
 }
 
 
-function array_move(arr, old_index, new_index) {
+function arrayMove(arr, old_index, new_index) {
     if (old_index < new_index) {
         new_index -= 1;
     }
@@ -346,7 +346,7 @@ function storeToCache(x, blob) {
     });
 }
 
-function get_favicon_html(doc) {
+function getFaviconHTML(doc) {
     let favicon = null;
     let nodeList = doc.getElementsByTagName("link");
     for (let element of nodeList) {
@@ -376,7 +376,6 @@ function setFavicon(x, img, el) {
                 window.addEventListener("beforeunload", function () {
                     URL.revokeObjectURL(blob);
                 });
-
             });
         return;
     }
