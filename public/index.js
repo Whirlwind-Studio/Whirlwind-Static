@@ -19,7 +19,7 @@ const bookmarks_wrapper = document.getElementById("bookmarks-wrapper");
 const bookmark_star = document.getElementById("bookmark-star");
 const bookmark_star_filled = document.getElementById("filled-star");
 
-const bookmarks_enabled_by_default = false;
+const bookmarks_enabled_by_default = true;
 const bookmark_id_prefix = "bookmark_whirlwind_";
 let bookmarks;
 
