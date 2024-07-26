@@ -179,7 +179,6 @@ body {
     display: var(--bookmarks-display);
     align-items: center;
     justify-content: left;
-    /* gap: 1rem; */
     margin: 0 1rem 0.75rem;
     align-self: start;
 }
