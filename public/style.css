@@ -315,6 +315,7 @@ body {
 .settings {
     position: relative;
     margin: 0.5% 3% 0.5% 3%;
+    padding-right: 1.25rem;
 }
 
 .settings-button {
