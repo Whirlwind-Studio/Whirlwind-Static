@@ -1,3 +1,4 @@
+# ARCHIVED: MAKE COMMITS TO THE /public FOLDER IN WHIRLWIND-APP INSTEAD
 # Whirlwind-Static
 The frontend for the Whirlwind proxy.
 
